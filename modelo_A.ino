@@ -2,16 +2,16 @@
 #include <NewPing.h>
 #include <Servo.h> 
 
-#define TRIG_PIN A4 
-#define ECHO_PIN A5 
+#define TRIG_PIN A1 
+#define ECHO_PIN A0 
 #define MAX_DISTANCE 200 
 #define MAX_SPEED 190 // sets speed of DC  motors
 #define MAX_SPEED_OFFSET 20
 
 NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE); 
 
-AF_DCMotor motor1(3, MOTOR12_1KHZ); 
-AF_DCMotor motor2(4, MOTOR12_1KHZ);
+AF_DCMotor motor1(1, MOTOR12_1KHZ); 
+AF_DCMotor motor2(2, MOTOR12_1KHZ);
 
 Servo myservo;   
 
