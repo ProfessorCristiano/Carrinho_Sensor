@@ -1,95 +1,129 @@
+/// Inclompleto///
+
+
+////////////////////////////NOTAS////////////////////////////////
+// O Modelo B utiliza ponte L298N
+// Para não fazer pontes de ligações com a alimentação e o terra
+// E para deixar as ligações do sensor de distância e servo motor mais "Bonitinhos" na placa, e fáceis dos alunos reproduzirem 
+// eu optei por deixar as portas digitais configuradas de forma a se portarem como portas de alimentação 5V e GND
+// Isso irá aparecer na parte do setup e estará devidamente comentada
+//
+/////////////////////////////////////////////////////////
+
 #include <AFMotor.h>
 #include <NewPing.h>
 #include <Servo.h> 
 
-#define TRIG_PIN A4 
-#define ECHO_PIN A5 
-#define MAX_DISTANCE 200 
-#define MAX_SPEED 190 // sets speed of DC  motors
+#define TRIG_PIN A1                 // Pino do Sensor Trigger
+#define ECHO_PIN A0                 // Pino do Sensor Echo
+#define MAX_DISTANCE 200            // Distância Máxima de colisão em cm
+#define MAX_SPEED 190               // Define Velocidade Máxima do Motor. Váximo possível 255
 #define MAX_SPEED_OFFSET 20
 
-NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE); 
+NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);     // Criação do objeto sonar
 
-AF_DCMotor motor1(3, MOTOR12_1KHZ); 
-AF_DCMotor motor2(4, MOTOR12_1KHZ);
+AF_DCMotor motor1(1, MOTOR12_1KHZ);                  // Configura motor utilizado pelo Shield
+AF_DCMotor motor2(2, MOTOR12_1KHZ);                  // Configura motor utilizado pelo Shield
 
-Servo myservo;   
+Servo myservo;                                       // instancia classe Servo como instância myservo
 
-boolean goesForward=false;
-int distance = 100;
-int speedSet = 0;
+boolean VaParaFrente=false;
+int distancia = 100;                                 // cria variável para guardar a distância (cm)
+int speedSet = 0;                                    // cria variável para guardar o incremento de velocidade
+
+int IN1 = 8;
+int IN2 = 9;
+int IN3 = 10;
+int IN4 = 11;
+
 
 void setup() {
+  
+  // configurar as portas de alimentação do sensor e servo motor //
+   pinMode(7, OUTPUT);       // porta de vcc do sensor de proximidade
+   digitalWrite(7, HIGH)     // valor alto é equivalente a 5v
+   pinMode(4, OUTPUT);       // porta de GND do sensor de proximidade
+   digitalWrite(4, LOW)      // valor baixo é equivalente a GND 
+  //
+  pinMode(13, OUTPUT);       // porta de vcc do servo motor
+  digitalWrite(13, HIGH)     // valor alto é equivalente a 5v   
+  // Fim da gambiarra /////////////
+    
+ pinMode(IN1, OUTPUT);
+ pinMode(IN2, OUTPUT);
+ pinMode(IN3, OUTPUT);
+ pinMode(IN4, OUTPUT);   
 
-  myservo.attach(10);  
-  myservo.write(90); 
-  delay(2000);
-  distance = readPing();
+  myservo.attach(12);                                // configura a instância myservo na porta 12
+  myservo.write(90);                                 // posição inicial do servo 90 graus
+  delay(2000);                                       // espera dois segundos 
+  distancia = readPing();                            // linhas abaixo ele faz 4 leituras seguidas
   delay(100);
-  distance = readPing();
+  distancia = readPing();
   delay(100);
-  distance = readPing();
+  distancia = readPing();
   delay(100);
-  distance = readPing();
+  distancia = readPing();
   delay(100);
 }
 
 void loop() {
- int distanceR = 0;
- int distanceL =  0;
+ int distanciaR = 0;                                //cria variável para guardar a distância à direita
+ int distanciaL =  0;                               //cria variável para guardar a distância à esquerda
  delay(40);
  
- if(distance<=15)
+ if(distancia<=15)                                  // se distância menor que 15 (cm)
  {
-  moveStop();
-  delay(100);
-  moveBackward();
-  delay(300);
-  moveStop();
-  delay(200);
-  distanceR = lookRight();
-  delay(200);
-  distanceL = lookLeft();
-  delay(200);
+  moveStop();                                       // para de mover
+  delay(100);                                       // espera um décimo de segundo (100 ms)
+  moveBackward();                                   // anda para trás
+  delay(300);                                       // por três décimos de segundo (300 ms)
+  moveStop();                                       // para de mover 
+  delay(200);                                       // por dois décimos de segundo (200 ms)
+  distanciaR = lookRight();                         // distância da direita igual a função lookRigth()
+  delay(200);                                       // espera por dois décimos de segundo (200 ms)
+  distanciaL = lookLeft();                          // distância da esquerda igual a função lookLeft()
+  delay(200);                                       // espera por dois décimos de segundo (200 ms)
 
-  if(distanceR>=distanceL)
+  if(distanciaR>=distanciaL)                        // se distância da direita maior que a distência da esquerda
   {
-    turnRight();
-    moveStop();
+    turnRight();                                    // Vira para Direita
+    moveStop();                                     // para de mover
   }else
   {
-    turnLeft();
-    moveStop();
+    turnLeft();                                     // Vira para Esquerda
+    moveStop();                                     // para de mover
   }
  }else
  {
-  moveForward();
+  moveForward();                                   // anda para frente
  }
- distance = readPing();
+ distancia = readPing();                           // mede a distância
 }
 
-int lookRight()
+int lookRight() // Função Olha para direita
 {
     myservo.write(10); 
     delay(500);
-    int distance = readPing();
+    int distancia = readPing();
     delay(100);
     myservo.write(90); 
-    return distance;
+    return distancia;
 }
 
-int lookLeft()
+int lookLeft() // Função Olha para esquerda
 {
     myservo.write(160); 
     delay(500);
-    int distance = readPing();
+    int distancia = readPing();
     delay(100);
     myservo.write(90); 
-    return distance;
+    return distancia;
     delay(100);
 }
 
-int readPing() { 
+int readPing()  // Função para fazer a leitura das distâncias
+{ 
   delay(70);
   int cm = sonar.ping_cm();
   if(cm==0)
@@ -99,19 +133,20 @@ int readPing() {
   return cm;
 }
 
-void moveStop() {
+void moveStop() {  // Função para parar os motores
   motor1.run(RELEASE); 
   motor2.run(RELEASE);
   } 
   
-void moveForward() {
+void moveForward() // Função para andar para frente
+{ 
 
- if(!goesForward)
+ if(!VaParaFrente)
   {
-    goesForward=true;
+    VaParaFrente=true;
     motor1.run(FORWARD);      
     motor2.run(FORWARD);      
-   for (speedSet = 0; speedSet < MAX_SPEED; speedSet +=2) // slowly bring the speed up to avoid loading down the batteries too quickly
+   for (speedSet = 0; speedSet < MAX_SPEED; speedSet +=2) // inicia o movimento devagar pois os motores DC tem dificuldade de fazer um arranque bruto, também ajuda a economizar bateria
    {
     motor1.setSpeed(speedSet);
     motor2.setSpeed(speedSet+MAX_SPEED_OFFSET);
@@ -120,11 +155,12 @@ void moveForward() {
   }
 }
 
-void moveBackward() {
-    goesForward=false;
+void moveBackward() // Função para andar para trás
+{
+    VaParaFrente=false;
     motor1.run(BACKWARD);      
     motor2.run(BACKWARD);  
-  for (speedSet = 0; speedSet < MAX_SPEED; speedSet +=2) // slowly bring the speed up to avoid loading down the batteries too quickly
+  for (speedSet = 0; speedSet < MAX_SPEED; speedSet +=2) // inicia o movimento devagar pois os motores DC tem dificuldade de fazer um arranque bruto, também ajuda a economizar bateria
   {
     motor1.setSpeed(speedSet);
     motor2.setSpeed(speedSet+MAX_SPEED_OFFSET);
@@ -132,7 +168,8 @@ void moveBackward() {
   }
 }  
 
-void turnRight() {
+void turnRight()// Função para virar a direita
+{
   motor1.run(FORWARD);
   motor2.run(BACKWARD);     
   delay(300);
@@ -140,7 +177,8 @@ void turnRight() {
   motor2.run(FORWARD);      
 } 
  
-void turnLeft() {
+void turnLeft() // Função para virar a esquerda
+{
   motor1.run(BACKWARD);     
   motor2.run(FORWARD);     
   delay(300);
