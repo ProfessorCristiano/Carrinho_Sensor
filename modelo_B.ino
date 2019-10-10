@@ -27,10 +27,14 @@ boolean VaParaFrente=false;
 int distancia = 100;                                 // cria variável para guardar a distância (cm)
 int speedSet = 0;                                    // cria variável para guardar o incremento de velocidade
 
-int IN1 = 8;
-int IN2 = 9;
-int IN3 = 10;
-int IN4 = 11;
+
+                                                     // cria as variáveis a seguir com os nomes INI das portas de 
+                                                     // conexões da ponte para facilitar a conexão e interpretação
+                                                     //
+int IN1 = 8;                                         // cria variável INI1 com valor 8
+int IN2 = 9;                                         // cria variável INI2 com valor 9
+int IN3 = 10;                                        // cria variável INI3 com valor 10
+int IN4 = 11;                                        // cria variável INI4 com valor 11
 
 
 void setup() {
