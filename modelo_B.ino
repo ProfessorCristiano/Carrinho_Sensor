@@ -10,7 +10,6 @@
 //
 /////////////////////////////////////////////////////////
 
-#include <AFMotor.h>
 #include <NewPing.h>
 #include <Servo.h> 
 
@@ -21,9 +20,6 @@
 #define MAX_SPEED_OFFSET 20
 
 NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);     // Criação do objeto sonar
-
-AF_DCMotor motor1(1, MOTOR12_1KHZ);                  // Configura motor utilizado pelo Shield
-AF_DCMotor motor2(2, MOTOR12_1KHZ);                  // Configura motor utilizado pelo Shield
 
 Servo myservo;                                       // instancia classe Servo como instância myservo
 
@@ -134,8 +130,10 @@ int readPing()  // Função para fazer a leitura das distâncias
 }
 
 void moveStop() {  // Função para parar os motores
-  motor1.run(RELEASE); 
-  motor2.run(RELEASE);
+  digitalWrite(INI1, LOW)
+  digitalWrite(INI2, LOW)
+  digitalWrite(INI3, LOW)
+  digitalWrite(INI4, LOW)
   } 
   
 void moveForward() // Função para andar para frente
@@ -144,44 +142,45 @@ void moveForward() // Função para andar para frente
  if(!VaParaFrente)
   {
     VaParaFrente=true;
-    motor1.run(FORWARD);      
-    motor2.run(FORWARD);      
-   for (speedSet = 0; speedSet < MAX_SPEED; speedSet +=2) // inicia o movimento devagar pois os motores DC tem dificuldade de fazer um arranque bruto, também ajuda a economizar bateria
-   {
-    motor1.setSpeed(speedSet);
-    motor2.setSpeed(speedSet+MAX_SPEED_OFFSET);
-    delay(5);
-   }
+    digitalWrite(INI1, HIGH)
+    digitalWrite(INI2, LOW)
+    digitalWrite(INI3, HIGH)
+    digitalWrite(INI4, LOW)
   }
 }
 
 void moveBackward() // Função para andar para trás
 {
     VaParaFrente=false;
-    motor1.run(BACKWARD);      
-    motor2.run(BACKWARD);  
-  for (speedSet = 0; speedSet < MAX_SPEED; speedSet +=2) // inicia o movimento devagar pois os motores DC tem dificuldade de fazer um arranque bruto, também ajuda a economizar bateria
-  {
-    motor1.setSpeed(speedSet);
-    motor2.setSpeed(speedSet+MAX_SPEED_OFFSET);
-    delay(5);
-  }
+    digitalWrite(INI1, LOW)
+    digitalWrite(INI2, HIGH)
+    digitalWrite(INI3, LOW)
+    digitalWrite(INI4, HIGH)
 }  
 
 void turnRight()// Função para virar a direita
 {
-  motor1.run(FORWARD);
-  motor2.run(BACKWARD);     
+    
+  digitalWrite(INI1, HIGH)
+  digitalWrite(INI2, LOW)
+  digitalWrite(INI3, LOW)
+  digitalWrite(INI4, HIGH)
   delay(300);
-  motor1.run(FORWARD);      
-  motor2.run(FORWARD);      
+  digitalWrite(INI1, HIGH)
+  digitalWrite(INI2, LOW)
+  digitalWrite(INI3, HIGH)
+  digitalWrite(INI4, LOW) 
 } 
  
 void turnLeft() // Função para virar a esquerda
 {
-  motor1.run(BACKWARD);     
-  motor2.run(FORWARD);     
+  digitalWrite(INI1, LOW)
+  digitalWrite(INI2, HIGH)
+  digitalWrite(INI3, HIGH)
+  digitalWrite(INI4, LOW)  
   delay(300);
-  motor1.run(FORWARD);     
-  motor2.run(FORWARD);
+  digitalWrite(INI1, HIGH)
+  digitalWrite(INI2, LOW)
+  digitalWrite(INI3, HIGH)
+  digitalWrite(INI4, LOW)
 }  
