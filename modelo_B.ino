@@ -16,8 +16,7 @@
 #define TRIG_PIN A1                 // Pino do Sensor Trigger
 #define ECHO_PIN A0                 // Pino do Sensor Echo
 #define MAX_DISTANCE 200            // Distância Máxima de colisão em cm
-#define MAX_SPEED 190               // Define Velocidade Máxima do Motor. Váximo possível 255
-#define MAX_SPEED_OFFSET 20
+
 
 NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);     // Criação do objeto sonar
 
@@ -45,8 +44,8 @@ void setup() {
    pinMode(4, OUTPUT);       // porta de GND do sensor de proximidade
    digitalWrite(4, LOW)      // valor baixo é equivalente a GND 
   //
-  pinMode(13, OUTPUT);       // porta de vcc do servo motor
-  digitalWrite(13, HIGH)     // valor alto é equivalente a 5v   
+   pinMode(13, OUTPUT);       // porta de vcc do servo motor
+   digitalWrite(13, HIGH)     // valor alto é equivalente a 5v   
   // Fim da gambiarra /////////////
     
  pinMode(IN1, OUTPUT);
