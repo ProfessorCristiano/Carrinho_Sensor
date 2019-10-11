@@ -1,4 +1,5 @@
 /// COMPLETO///
+///TESTADO E FUNCIONANDO /// 
 
 
 ////////////////////////////NOTAS////////////////////////////////
@@ -13,8 +14,8 @@
 #include <NewPing.h>
 #include <Servo.h> 
 
-#define TRIG_PIN A1                 // Pino do Sensor Trigger
-#define ECHO_PIN A0                 // Pino do Sensor Echo
+#define TRIG_PIN 5                 // Pino do Sensor Trigger
+#define ECHO_PIN 6                 // Pino do Sensor Echo
 #define MAX_DISTANCE 200            // Distância Máxima de colisão em cm
 
 
@@ -30,28 +31,28 @@ int speedSet = 0;                                    // cria variável para guar
                                                      // cria as variáveis a seguir com os nomes INI das portas de 
                                                      // conexões da ponte para facilitar a conexão e interpretação
                                                      //
-int IN1 = 8;                                         // cria variável INI1 com valor 8
-int IN2 = 9;                                         // cria variável INI2 com valor 9
-int IN3 = 10;                                        // cria variável INI3 com valor 10
-int IN4 = 11;                                        // cria variável INI4 com valor 11
+int INI1 = 8;                                         // cria variável INI1 com valor 8
+int INI2 = 9;                                         // cria variável INI2 com valor 9
+int INI3 = 10;                                        // cria variável INI3 com valor 10
+int INI4 = 11;                                        // cria variável INI4 com valor 11
 
 
 void setup() {
   
   // configurar as portas de alimentação do sensor e servo motor //
    pinMode(7, OUTPUT);       // porta de vcc do sensor de proximidade
-   digitalWrite(7, HIGH)     // valor alto é equivalente a 5v
+   digitalWrite(7, HIGH);    // valor alto é equivalente a 5v
    pinMode(4, OUTPUT);       // porta de GND do sensor de proximidade
-   digitalWrite(4, LOW)      // valor baixo é equivalente a GND 
+   digitalWrite(4, LOW);     // valor baixo é equivalente a GND 
   //
    pinMode(13, OUTPUT);       // porta de vcc do servo motor
-   digitalWrite(13, HIGH)     // valor alto é equivalente a 5v   
+   digitalWrite(13, HIGH);     // valor alto é equivalente a 5v   
   // Fim da gambiarra /////////////
     
- pinMode(IN1, OUTPUT);
- pinMode(IN2, OUTPUT);
- pinMode(IN3, OUTPUT);
- pinMode(IN4, OUTPUT);   
+ pinMode(INI1, OUTPUT);
+ pinMode(INI2, OUTPUT);
+ pinMode(INI3, OUTPUT);
+ pinMode(INI4, OUTPUT);   
 
   myservo.attach(12);                                // configura a instância myservo na porta 12
   myservo.write(90);                                 // posição inicial do servo 90 graus
@@ -133,10 +134,10 @@ int readPing()  // Função para fazer a leitura das distâncias
 }
 
 void moveStop() {  // Função para parar os motores
-  digitalWrite(INI1, LOW)
-  digitalWrite(INI2, LOW)
-  digitalWrite(INI3, LOW)
-  digitalWrite(INI4, LOW)
+  digitalWrite(INI1, LOW);
+  digitalWrite(INI2, LOW);
+  digitalWrite(INI3, LOW);
+  digitalWrite(INI4, LOW);
   } 
   
 void moveForward() // Função para andar para frente
@@ -145,45 +146,45 @@ void moveForward() // Função para andar para frente
  if(!VaParaFrente)
   {
     VaParaFrente=true;
-    digitalWrite(INI1, HIGH)
-    digitalWrite(INI2, LOW)
-    digitalWrite(INI3, HIGH)
-    digitalWrite(INI4, LOW)
+    digitalWrite(INI1, HIGH);
+    digitalWrite(INI2, LOW);
+    digitalWrite(INI3, HIGH);
+    digitalWrite(INI4, LOW);
   }
 }
 
 void moveBackward() // Função para andar para trás
 {
     VaParaFrente=false;
-    digitalWrite(INI1, LOW)
-    digitalWrite(INI2, HIGH)
-    digitalWrite(INI3, LOW)
-    digitalWrite(INI4, HIGH)
+    digitalWrite(INI1, LOW);
+    digitalWrite(INI2, HIGH);
+    digitalWrite(INI3, LOW);
+    digitalWrite(INI4, HIGH);
 }  
 
 void turnRight()// Função para virar a direita
 {
     
-  digitalWrite(INI1, HIGH)
-  digitalWrite(INI2, LOW)
-  digitalWrite(INI3, LOW)
-  digitalWrite(INI4, HIGH)
-  delay(300);
-  digitalWrite(INI1, HIGH)
-  digitalWrite(INI2, LOW)
-  digitalWrite(INI3, HIGH)
-  digitalWrite(INI4, LOW) 
+  digitalWrite(INI1, HIGH);
+  digitalWrite(INI2, LOW);
+  digitalWrite(INI3, LOW);
+  digitalWrite(INI4, HIGH);
+  delay(600);
+  digitalWrite(INI1, HIGH);
+  digitalWrite(INI2, LOW);
+  digitalWrite(INI3, HIGH);
+  digitalWrite(INI4, LOW); 
 } 
  
 void turnLeft() // Função para virar a esquerda
 {
-  digitalWrite(INI1, LOW)
-  digitalWrite(INI2, HIGH)
-  digitalWrite(INI3, HIGH)
-  digitalWrite(INI4, LOW)  
-  delay(300);
-  digitalWrite(INI1, HIGH)
-  digitalWrite(INI2, LOW)
-  digitalWrite(INI3, HIGH)
-  digitalWrite(INI4, LOW)
+  digitalWrite(INI1, LOW);
+  digitalWrite(INI2, HIGH);
+  digitalWrite(INI3, HIGH);
+  digitalWrite(INI4, LOW);  
+  delay(600);
+  digitalWrite(INI1, HIGH);
+  digitalWrite(INI2, LOW);
+  digitalWrite(INI3, HIGH);
+  digitalWrite(INI4, LOW);
 }  
