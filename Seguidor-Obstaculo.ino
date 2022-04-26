@@ -31,13 +31,16 @@ int INI2 = 9;                                        // cria variável INI2 com 
 int INI3 = 5;                                        // cria variável INI3 com valor 5
 int INI4 = 6;                                        // cria variável INI4 com valor 6
 
-int MServo = 11;                                     // cria variável para o Servo motor com valor 11
+
 
 //Definição dos pinos de controle do motor
 //#define M1 INI2 // Pino_Velocidade 1º Motor ( 0 a 255)_ Porta ATV_A ponte H;
 //#define M2 INI4 //Pino_Velocidade 2º Motor ( 0 a 255) _ Porta ATV_B ponte H;
 //#define dir1 INI1 //Pino_Direção do 1º Motor: Para frente / Para trás (HIGH ou LOW)_ porta IN1 ponte H;
 //#define dir2 INI3 //Pino_Direção do 2º Motor: Para frente / Para trás (HIGH ou LOW)_ porta IN3 ponte H;
+
+
+int MServo = 11;                                     // cria variável para o Servo motor com valor 11
 
 //Definição dos pinos dos sensores
 #define pin_S1 15                                     // Cria a Variável do Sensor da Direita
@@ -48,7 +51,12 @@ bool Sensor2 = 0;
 bool Sensor3 = 0;
 
 
-void setup() {
+void setup() 
+{
+
+Serial.begin(9600);
+Serial.println("INICIO");
+  
 //Definimos os pinos de controle dos motores como saída
   pinMode(INI1, OUTPUT);
   pinMode(INI2, OUTPUT);
@@ -81,72 +89,98 @@ void setup() {
 }
 
 void loop() {
-
-//Neste processo armazenamos o valor lido pelo sensor na variável que armazena tais dados.
-Sensor1 = digitalRead(pin_S1);
-Sensor2 = digitalRead(pin_S2);
-Sensor3 = digitalRead(pin_S3);
-
-//Aqui está toda a lógica de comportamento do robô: Para a cor branca atribuímos o valor 0 e, para a cor preta, o valor 1.
-if((Sensor1 == 0) && (Sensor2 == 0)){ // Se detectar na extremidade das faixas duas cores brancas
-// Ambos motores ligam na mesma velocidade
-    analogWrite(INI1, velocidade);
-    analogWrite(INI2, 0);
-    analogWrite(INI3, velocidade);
-    analogWrite(INI4, 0);
+  percurso();
 }
 
-if((Sensor1 == 1) && (Sensor2 == 0)){ // Se detectar um lado direito preto e o outro esquerdo branco
-// O motor direito desliga
-// O motor esquerdo fica ligado, fazendo assim o carrinho virar
-    analogWrite(INI1, 0);
-    analogWrite(INI2, 0);
-    analogWrite(INI3, velocidade);
-    analogWrite(INI4, 0);
 
+void percurso()
+{
+    //Neste processo armazenamos o valor lido pelo sensor na variável que armazena tais dados.
+    Sensor1 = digitalRead(pin_S1);
+    Sensor2 = digitalRead(pin_S2);
+    Sensor3 = digitalRead(pin_S3);
+
+    //Aqui está toda a lógica de comportamento do robô: Para a cor branca atribuímos o valor 0 e, para a cor preta, o valor 1.
+    if((Sensor1 == 0) && (Sensor2 == 0))
+    { 
+        // Se detectar na extremidade das faixas duas cores brancas
+        // Ambos motores ligam na mesma velocidade
+        Serial.println("Mover para frente");
+        for (velocidade=100; velocidade < 250; velocidade ++)
+        {
+          analogWrite(INI1, velocidade);
+          analogWrite(INI2, 0);
+          analogWrite(INI3, velocidade);
+          analogWrite(INI4, 0);
+        }
+    }
+
+    if((Sensor1 == 1) && (Sensor2 == 0))
+    { 
+        // Se detectar um lado direito preto e o outro esquerdo branco
+        // O motor direito desliga
+        // O motor esquerdo fica ligado, fazendo assim o carrinho virar
+        Serial.println("Vira para esquerda");
+        for (velocidade=100; velocidade < 250; velocidade ++)
+        {
+          analogWrite(INI1, 0);
+          analogWrite(INI2, 0);
+          analogWrite(INI3, velocidade);
+          analogWrite(INI4, 0);
+        }
+    }
+
+    if((Sensor1 == 0) && (Sensor2 == 1))
+    { 
+       // Se detectar um lado direito branco e o outro esquerdo preto
+       //O motor 1 fica ligado
+       // O motor 2 desliga, fazendo assim o carrinho virar no outro sentido
+       Serial.println("Vira para direita");
+       for (velocidade=100; velocidade < 250; velocidade ++)
+       {
+         analogWrite(INI1, velocidade);
+         analogWrite(INI2, 0);
+         analogWrite(INI3, 0);
+         analogWrite(INI4, 0);
+       }
+    }
 }
 
-if((Sensor1 == 0) && (Sensor2 == 1)){ // Se detectar um lado direito branco e o outro esquerdo preto
-//O motor 1 fica ligado
-// O motor 2 desliga, fazendo assim o carrinho virar no outro sentido
-    analogWrite(INI1, velocidade);
-    analogWrite(INI2, 0);
-    analogWrite(INI3, 0);
-    analogWrite(INI4, 0);
-}
-
+void desviaauto()
+{
+    int distanciaR = 0;                                   //cria variável para guardar a distância à direita
+    int distanciaL =  0;                                  //cria variável para guardar a distância à esquerda
+    //delay(40);
  
- int distanciaR = 0;                                //cria variável para guardar a distância à direita
- int distanciaL =  0;                               //cria variável para guardar a distância à esquerda
- //delay(40);
- 
- if(distancia<=15)                                  // se distância menor que 15 (cm)
- {
-  moveStop();                                       // para de mover
-  delay(100);                                       // espera um décimo de segundo (100 ms)
-  moveBackward();                                   // anda para trás
-  delay(300);                                       // por três décimos de segundo (300 ms)
-  moveStop();                                       // para de mover 
-  delay(200);                                       // por dois décimos de segundo (200 ms)
-  distanciaR = lookRight();                         // distância da direita igual a função lookRigth()
-  delay(200);                                       // espera por dois décimos de segundo (200 ms)
-  distanciaL = lookLeft();                          // distância da esquerda igual a função lookLeft()
-  delay(200);                                       // espera por dois décimos de segundo (200 ms)
+    if(distancia<=15)                                     // se distância menor que 15 (cm)
+    {
+        moveStop();                                       // para de mover
+        delay(100);                                       // espera um décimo de segundo (100 ms)
+        moveBackward();                                   // anda para trás
+        delay(300);                                       // por três décimos de segundo (300 ms)
+        moveStop();                                       // para de mover 
+        delay(200);                                       // por dois décimos de segundo (200 ms)
+        distanciaR = lookRight();                         // distância da direita igual a função lookRigth()
+        delay(200);                                       // espera por dois décimos de segundo (200 ms)
+        distanciaL = lookLeft();                          // distância da esquerda igual a função lookLeft()
+        delay(200);                                       // espera por dois décimos de segundo (200 ms)
 
-  if(distanciaR>=distanciaL)                        // se distância da direita maior que a distência da esquerda
-  {
-    turnRight();                                    // Vira para Direita
-    moveStop();                                     // para de mover
-  }else
-  {
-    turnLeft();                                     // Vira para Esquerda
-    moveStop();                                     // para de mover
-  }
- }else
- {
-  moveForward();                                   // anda para frente
- }
- distancia = readPing();                           // mede a distância
+        if(distanciaR>=distanciaL)                        // se distância da direita maior que a distência da esquerda
+        {
+            turnRight();                                  // Vira para Direita
+            moveStop();                                   // para de mover
+        }
+        else
+        {
+            turnLeft();                                   // Vira para Esquerda
+            moveStop();                                   // para de mover
+        }
+   }
+   else
+   {
+       moveForward();                                     // anda para frente
+   }
+   distancia = readPing();                                // mede a distância
 }
 
 int lookRight() // Função Olha para direita
