@@ -21,7 +21,7 @@
 
 //boolean VaParaFrente=false;
 //int distancia = 100;                                 // cria variável para guardar a distância (cm)
-int velocidade = 100;                                // Cria variável responsável por controlar a velocidade dos motores
+int velocidade = 200;                                // Cria variável responsável por controlar a velocidade dos motores
 
                                                      // cria as variáveis a seguir com os nomes INI das portas de 
                                                      // conexões da ponte para facilitar a conexão e interpretação
@@ -111,6 +111,7 @@ void percurso()
           analogWrite(INI2, 0);
           analogWrite(INI3, velocidade);
           analogWrite(INI4, 0);
+          delay(20);
         
     }
     else
@@ -125,6 +126,7 @@ void percurso()
           analogWrite(INI2, 0);
           analogWrite(INI3, velocidade);
           analogWrite(INI4, 0);
+          delay(20);
         }
         else
         {
@@ -139,14 +141,16 @@ void percurso()
                  analogWrite(INI2, 0);
                  analogWrite(INI3, 0);
                  analogWrite(INI4, 0);
+                 delay(20);
            }
            else
            {
-             delay(1000);
+             delay(2000);
              analogWrite(INI1, velocidade);
              analogWrite(INI2, 0);
              analogWrite(INI3, velocidade);
              analogWrite(INI4, 0);
+             delay(100);
            }
         }
     }
