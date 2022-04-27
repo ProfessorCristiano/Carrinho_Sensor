@@ -7,21 +7,21 @@
 //
 /////////////////////////////////////////////////////////
 
-#include <NewPing.h>
-#include <Servo.h> 
+//#include <NewPing.h>
+//#include <Servo.h> 
 
-#define TRIG_PIN 18                 // Pino do Sensor Trigger
-#define ECHO_PIN 17                 // Pino do Sensor Echo
-#define MAX_DISTANCE 200            // Distância Máxima de colisão em cm
+//#define TRIG_PIN 18                 // Pino do Sensor Trigger
+//#define ECHO_PIN 17                 // Pino do Sensor Echo
+//#define MAX_DISTANCE 200            // Distância Máxima de colisão em cm
 
 
-NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);     // Criação do objeto sonar
+//NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);     // Criação do objeto sonar
 
-Servo myservo;                                       // instancia classe Servo como instância myservo
+//Servo myservo;                                       // instancia classe Servo como instância myservo
 
-boolean VaParaFrente=false;
-int distancia = 100;                                 // cria variável para guardar a distância (cm)
-int velocidade = 250;                                // Cria variável responsável por controlar a velocidade dos motores
+//boolean VaParaFrente=false;
+//int distancia = 100;                                 // cria variável para guardar a distância (cm)
+int velocidade = 100;                                // Cria variável responsável por controlar a velocidade dos motores
 
                                                      // cria as variáveis a seguir com os nomes INI das portas de 
                                                      // conexões da ponte para facilitar a conexão e interpretação
@@ -40,7 +40,7 @@ int INI4 = 6;                                        // cria variável INI4 com 
 //#define dir2 INI3 //Pino_Direção do 2º Motor: Para frente / Para trás (HIGH ou LOW)_ porta IN3 ponte H;
 
 
-int MServo = 11;                                     // cria variável para o Servo motor com valor 11
+//int MServo = 11;                                     // cria variável para o Servo motor com valor 11
 
 //Definição dos pinos dos sensores
 #define pin_S1 15                                     // Cria a Variável do Sensor da Direita
@@ -74,7 +74,7 @@ Serial.println("INICIO");
   pinMode(pin_S2, INPUT);
   pinMode(pin_S3, INPUT);
 
-//Definimos o Servo moto
+/*Definimos o Servo moto
   myservo.attach(MServo);                                // configura a instância myservo na porta 12
   myservo.write(90);                                 // posição inicial do servo 90 graus
   delay(2000);                                       // espera dois segundos 
@@ -85,7 +85,7 @@ Serial.println("INICIO");
   distancia = readPing();
   delay(100);
   distancia = readPing();
-  delay(100);
+  delay(100);*/
 }
 
 void loop() {
@@ -106,46 +106,52 @@ void percurso()
         // Se detectar na extremidade das faixas duas cores brancas
         // Ambos motores ligam na mesma velocidade
         Serial.println("Mover para frente");
-        for (velocidade=100; velocidade < 250; velocidade ++)
-        {
+        
           analogWrite(INI1, velocidade);
           analogWrite(INI2, 0);
           analogWrite(INI3, velocidade);
           analogWrite(INI4, 0);
-        }
+        
     }
-
-    if((Sensor1 == 1) && (Sensor2 == 0))
-    { 
+    else
+    {
+      if((Sensor1 == 1) && (Sensor2 == 0))
+        { 
         // Se detectar um lado direito preto e o outro esquerdo branco
         // O motor direito desliga
         // O motor esquerdo fica ligado, fazendo assim o carrinho virar
         Serial.println("Vira para esquerda");
-        for (velocidade=100; velocidade < 250; velocidade ++)
-        {
           analogWrite(INI1, 0);
           analogWrite(INI2, 0);
           analogWrite(INI3, velocidade);
           analogWrite(INI4, 0);
         }
-    }
-
-    if((Sensor1 == 0) && (Sensor2 == 1))
-    { 
-       // Se detectar um lado direito branco e o outro esquerdo preto
-       //O motor 1 fica ligado
-       // O motor 2 desliga, fazendo assim o carrinho virar no outro sentido
-       Serial.println("Vira para direita");
-       for (velocidade=100; velocidade < 250; velocidade ++)
-       {
-         analogWrite(INI1, velocidade);
-         analogWrite(INI2, 0);
-         analogWrite(INI3, 0);
-         analogWrite(INI4, 0);
-       }
+        else
+        {
+          if((Sensor1 == 0) && (Sensor2 == 1))
+          { 
+               // Se detectar um lado direito branco e o outro esquerdo preto
+               //O motor 1 fica ligado
+               // O motor 2 desliga, fazendo assim o carrinho virar no outro sentido
+               Serial.println("Vira para direita");
+       
+                 analogWrite(INI1, velocidade);
+                 analogWrite(INI2, 0);
+                 analogWrite(INI3, 0);
+                 analogWrite(INI4, 0);
+           }
+           else
+           {
+             delay(1000);
+             analogWrite(INI1, velocidade);
+             analogWrite(INI2, 0);
+             analogWrite(INI3, velocidade);
+             analogWrite(INI4, 0);
+           }
+        }
     }
 }
-
+/*
 void desviaauto()
 {
     int distanciaR = 0;                                   //cria variável para guardar a distância à direita
@@ -271,3 +277,4 @@ void turnLeft() // Função para virar a esquerda
   analogWrite(INI3, velocidade);
   analogWrite(INI4, 0);
 }  
+*/
